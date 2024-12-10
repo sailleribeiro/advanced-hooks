@@ -36,7 +36,6 @@ export default function Home() {
         <div
           style={{
             display: "flex",
-            flex: "1",
             flexDirection: "row",
             gap: "8px",
           }}
