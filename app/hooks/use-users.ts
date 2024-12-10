@@ -69,10 +69,15 @@ export const useUsers = () => {
   };
 
   const handleNewUser = () => {
-    const newUser = {
+    if (!state.nameNewUser) {
+      alert("O nome do usuário não pode estar vazio.");
+      return;
+    }
+
+    const newUser: Data = {
       id: Math.random(),
-      name: state.nameNewUser,
-      username: state.nameNewUser,
+      name: state.nameNewUser.trim(),
+      username: state.nameNewUser.trim(),
       email: "",
       address: "",
       phone: "",
@@ -80,8 +85,7 @@ export const useUsers = () => {
       company: "",
     };
 
-    state.users.push(newUser);
-    dispatch({ type: "setUsers", payload: state.users });
+    dispatch({ type: "setUsers", payload: [...state.users, newUser] });
   };
 
   const handleRemoveUser = (id: number) => {
