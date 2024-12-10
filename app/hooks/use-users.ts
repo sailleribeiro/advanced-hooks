@@ -6,6 +6,7 @@ const initialState = {
   isloading: false,
   users: [] as Data[],
   filteredUsers: [] as Data[],
+  nameNewUser: "",
 };
 
 type State = typeof initialState;
@@ -25,7 +26,16 @@ type SetFilterAction = {
   payload: string;
 };
 
-type Actions = LoadingDataAction | SetUsersAction | SetFilterAction;
+type setNameNewUserActions = {
+  type: "setNameNewUser";
+  payload: string;
+};
+
+type Actions =
+  | LoadingDataAction
+  | SetUsersAction
+  | SetFilterAction
+  | setNameNewUserActions;
 
 const reducer = (state: State, action: Actions): State => {
   switch (action.type) {
@@ -40,6 +50,8 @@ const reducer = (state: State, action: Actions): State => {
           return item.name.toLowerCase().includes(action.payload.toLowerCase());
         }),
       };
+    case "setNameNewUser":
+      return { ...state, nameNewUser: action.payload };
     default:
       return state;
   }
@@ -50,6 +62,31 @@ export const useUsers = () => {
 
   const setFilter = (filter: string) => {
     dispatch({ type: "setFilter", payload: filter });
+  };
+
+  const setNameNewUser = (name: string) => {
+    dispatch({ type: "setNameNewUser", payload: name });
+  };
+
+  const handleNewUser = () => {
+    const newUser = {
+      id: Math.random(),
+      name: state.nameNewUser,
+      username: state.nameNewUser,
+      email: "",
+      address: "",
+      phone: "",
+      website: "",
+      company: "",
+    };
+
+    state.users.push(newUser);
+    dispatch({ type: "setUsers", payload: state.users });
+  };
+
+  const handleRemoveUser = (id: number) => {
+    const newUsers = state.users.filter((item) => item.id !== id);
+    dispatch({ type: "setUsers", payload: newUsers });
   };
 
   useEffect(() => {
@@ -74,5 +111,8 @@ export const useUsers = () => {
     users: state.users,
     filteredUsers: state.filteredUsers,
     setFilter,
+    setNameNewUser,
+    handleNewUser,
+    handleRemoveUser,
   };
 };
