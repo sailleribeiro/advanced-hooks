@@ -25,13 +25,6 @@ export default function Home() {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <h1 className={styles.title}>Usuarios</h1>
-        <input
-          type="text"
-          className={styles.input}
-          placeholder="Procurar usuario"
-          onChange={(e) => setFilter(e.target.value)}
-        />
         <h1 className={styles.title}>Cadastrar</h1>
         <div
           style={{
@@ -49,6 +42,14 @@ export default function Home() {
 
           <button onClick={handleNewUser}>Adicionar</button>
         </div>
+
+        <h1 className={styles.title}>Usuarios</h1>
+        <input
+          type="text"
+          className={styles.input}
+          placeholder="Procurar usuario"
+          onChange={(e) => setFilter(e.target.value)}
+        />
 
         <ul>
           {filteredUsers?.map((item: Data) => (
