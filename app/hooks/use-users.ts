@@ -2,40 +2,37 @@ import { useEffect, useReducer } from "react";
 import { Data } from "../types";
 import { routeUsers } from "@/services/api";
 
-const initialState = {
+interface State {
+  isloading: boolean;
+  users: Data[];
+  filteredUsers: Data[];
+  nameNewUser: string;
+}
+
+const initialState: State = {
   isloading: false,
-  users: [] as Data[],
-  filteredUsers: [] as Data[],
+  users: [],
+  filteredUsers: [],
   nameNewUser: "",
 };
 
-type State = typeof initialState;
-
-type LoadingDataAction = {
-  type: "loadingData";
-  payload: boolean;
-};
-
-type SetUsersAction = {
-  type: "setUsers";
-  payload: Data[];
-};
-
-type SetFilterAction = {
-  type: "setFilter";
-  payload: string;
-};
-
-type setNameNewUserActions = {
-  type: "setNameNewUser";
-  payload: string;
-};
-
 type Actions =
-  | LoadingDataAction
-  | SetUsersAction
-  | SetFilterAction
-  | setNameNewUserActions;
+  | {
+      type: "loadingData";
+      payload: boolean;
+    }
+  | {
+      type: "setUsers";
+      payload: Data[];
+    }
+  | {
+      type: "setFilter";
+      payload: string;
+    }
+  | {
+      type: "setNameNewUser";
+      payload: string;
+    };
 
 const reducer = (state: State, action: Actions): State => {
   switch (action.type) {
@@ -60,9 +57,16 @@ const reducer = (state: State, action: Actions): State => {
 export const useUsers = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const setFilter = (filter: string) => {
-    dispatch({ type: "setFilter", payload: filter });
-  };
+  const filterUsers = (users: Data[], filter: string) => {
+    return users.filter((item: Data) => {
+      return item.name.toLowerCase().includes(filter.toLowerCase());
+    });
+
+    const setFilter = (filter: string) => {
+      const filteredUsers = filterUsers(state.users, filter);
+      dispatch({ type: "setFilter", payload: filteredUsers });
+    };
+
 
   const setNameNewUser = (name: string) => {
     dispatch({ type: "setNameNewUser", payload: name });
